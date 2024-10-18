@@ -1,11 +1,10 @@
-mod email;
 pub mod date;
 
 use anyhow::Result;
 use std::collections::HashMap;
 use std::str::FromStr;
+use crate::galaxy::types::{Email, GroupName};
 
-use email::Email;
 use date::Date;
 
 const TEST_CONFIG_FILE: &str = "./src/sample.toml";
@@ -24,8 +23,8 @@ impl TimeRange {
 
 #[derive(Debug)]
 pub struct ConfigFile {
-    pub groups: HashMap<String, Vec<Email>>,
-    pub schedule: HashMap<String, Vec<TimeRange>>,
+    pub groups: HashMap<GroupName, Vec<Email>>,
+    pub schedule: HashMap<GroupName, Vec<TimeRange>>,
 }
 
 impl FromStr for ConfigFile {
@@ -43,7 +42,7 @@ impl FromStr for ConfigFile {
     }
 }
 
-fn parse_groups(groups: &toml::Table) -> Result<HashMap<String, Vec<Email>>> {
+fn parse_groups(groups: &toml::Table) -> Result<HashMap<GroupName, Vec<Email>>> {
     let mut groups_map = HashMap::new();
     for (group_name, emails) in groups.iter() {
         let email_array = emails.as_array().ok_or(anyhow::anyhow!("emails not found"))?;
@@ -52,17 +51,17 @@ fn parse_groups(groups: &toml::Table) -> Result<HashMap<String, Vec<Email>>> {
             .map(|email| email.ok_or(anyhow::anyhow!("email not found")))
             .flat_map(|email| email.map(|email| email.parse::<Email>()))
             .collect::<Result<Vec<Email>>>()?;
-        groups_map.insert(group_name.clone(), emails);
+        groups_map.insert(group_name.parse()?, emails);
     }
     Ok(groups_map)
 }
 
-fn parse_schedule(schedule: &toml::Table) -> Result<HashMap<String, Vec<TimeRange>>> {
+fn parse_schedule(schedule: &toml::Table) -> Result<HashMap<GroupName, Vec<TimeRange>>> {
     let mut schedule_map = HashMap::new();
     for (group_name, schedules) in schedule.iter() {
         let schedules = schedules.as_array().ok_or(anyhow::anyhow!("schedules not found"))?;        
         let schedules: Vec<TimeRange> = schedules.iter().map(parse_schedule_item).collect::<Result<Vec<TimeRange>>>()?;
-        schedule_map.insert(group_name.clone(), schedules);
+        schedule_map.insert(group_name.parse()?, schedules);
     }
     Ok(schedule_map)
 }
