@@ -77,8 +77,15 @@ impl TrainingManager {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let config: config::ConfigFile = std::fs::read_to_string("./src/sample.toml")?.parse()?;
-    let galaxy = galaxy::Galaxy::new()?;
+    let args = std::env::args().collect::<Vec<String>>();
+    if args.len() != 1 {
+        println!("Usage: training-manager <config-file>");
+        return Ok(());
+    }
+    let config_path = &args[0];
+    let config: config::ConfigFile = config::read_config(config_path)?;
+
+    let galaxy = galaxy::init_galaxy()?;
 
     let mut training_manager = TrainingManager::new(Box::new(galaxy));
 
