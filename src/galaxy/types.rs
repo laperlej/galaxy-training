@@ -221,3 +221,51 @@ impl FromStr for Email {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_user_id() {
+        let user_id = "1".parse::<UserID>().unwrap();
+        assert_eq!(user_id.to_string(), "1");
+    }
+
+    #[test]
+    fn test_role_id() {
+        let role_id = "1".parse::<RoleID>().unwrap();
+        assert_eq!(role_id.to_string(), "1");
+    }
+
+    #[test]
+    fn test_group_id() {
+        let group_id = "1".parse::<GroupID>().unwrap();
+        assert_eq!(group_id.to_string(), "1");
+    }
+
+    #[test]
+    fn test_user_name() {
+        let user_name = "John Doe".parse::<UserName>().unwrap();
+        assert_eq!(user_name.to_string(), "John Doe");
+    }
+
+    #[test]
+    fn test_role_name() {
+        let role_name = "John Doe".parse::<RoleName>().unwrap();
+        assert_eq!(role_name.to_string(), "John Doe");
+    }
+
+    #[test]
+    fn test_group_name() {
+        let group_name = "John Doe".parse::<GroupName>().unwrap();
+        assert_eq!(group_name.to_string(), "John Doe");
+    }
+
+    #[test]
+    fn test_email() {
+        let email = "john@example.com".parse::<Email>().unwrap();
+        assert_eq!(email.to_string(), "john@example.com");
+    }
+}
+
