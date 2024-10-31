@@ -18,10 +18,30 @@ impl TrainingManager {
         }
     }
 
+    async fn create_missing_roles(&mut self, missing_roles: impl Iterator<Item=&RoleName>) -> Result<()> {
+        for role in missing_roles {
+            let role = self.galaxy.create_role(&role.to_string(), "").await?;
+            println!("Created role {}", role.name);
+        }
+        Ok(())
+    }
+
+    async fn create_missing_groups(&mut self, missing_groups: impl Iterator<Item=&GroupName>) -> Result<()> {
+        for group in missing_groups {
+            let group = self.galaxy.create_group(&group.to_string()).await?;
+            println!("Created group {}", group.name);
+        }
+        Ok(())
+    }
+
+
     async fn apply_config(&mut self, config: &config::ConfigFile) -> Result<()> {
-        let users = self.galaxy.get_users().await?;
-        let roles = self.galaxy.get_roles().await?;
-        let groups = self.galaxy.get_groups().await?;
+        let (users, roles, groups) = tokio::join!(
+            self.galaxy.get_users(),
+            self.galaxy.get_roles(),
+            self.galaxy.get_groups()
+        );
+        let (users, roles, groups) = (users?, roles?, groups?);
 
         let galaxy_users: HashMap<Email, User> = HashMap::from_iter(users.iter().map(|user| (user.email.clone(), user.clone())));
         let galaxy_groups: HashSet<GroupName> = HashSet::from_iter(groups.iter().map(|group| group.name.clone()));
@@ -32,16 +52,10 @@ impl TrainingManager {
         let config_groups: HashSet<GroupName> = HashSet::from_iter(config.groups.iter().map(|group| group.0.clone()));
 
         let missing_roles = config_roles.difference(&galaxy_roles);
-        for role in missing_roles {
-            let role = self.galaxy.create_role(&role.to_string(), "").await?;
-            println!("Created role {}", role.name);
-        }
-
         let missing_groups = config_groups.difference(&galaxy_groups);
-        for group in missing_groups {
-            let group = self.galaxy.create_group(&group.to_string()).await?;
-            println!("Created group {}", group.name);
-        }
+
+        self.create_missing_roles(missing_roles).await?;
+        self.create_missing_groups(missing_groups).await?;
 
         let training_role_id = roles.iter().find(|role| role.name == training_role_name).unwrap().id.clone();
 
