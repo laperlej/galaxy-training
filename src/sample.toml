@@ -1,30 +1,10 @@
 [groups]
-admin = [
+test = [
     "jonathan.laperle@userbrooke.ca",
     "carol.gauthier@usherbrooke.ca",
 ]
-BFT708_A14 = [
-    "Aura-Lee.Beliveau-Caron@USherbrooke.ca",
-    "Felix-Antoine.Trifiro@USherbrooke.ca",
-    "Ihor.Arefiev@USherbrooke.ca",
-    "Jeremy.Gagnon@USherbrooke.ca",
-    "Jonathan.Wilson2@USherbrooke.ca",
-    "Kevin-Row.Malkoun@USherbrooke.ca",
-    "Louis.Robitaille@USherbrooke.ca",
-    "Michelle.Scott@USherbrooke.ca",
-    "Nicolas.Provencher@USherbrooke.ca",
-    "Pierre-Etienne.Jacques@USherbrooke.ca",
-    "Samuel.Coderre@USherbrooke.ca",
-    "Sebastien.Rodrigue@USherbrooke.ca",
-    "Shawn.Pires.Mendes@USherbrooke.ca",
-    "Simon.Bache@USherbrooke.ca",
-    "Valeriia.Vasylieva2@USherbrooke.ca",
-]
 
 [schedule]
-admin = [
+test = [
     { from = "2024-10-10", to = "3000-10-10"},
-]
-BFT708_A14 = [
-    { from = "2024-10-1", to = "2024-10-31"},
 ]

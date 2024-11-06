@@ -20,16 +20,22 @@ struct  MockGalaxy {
 impl MockGalaxy {
     fn new() -> Result<Self> {
         let id_generator = IDGenerator::new();
-        let mut users = HashMap::new();
-        let mut roles = HashMap::new();
-        let mut groups = HashMap::new();
-        let mut group_roles = HashMap::new();
-        let mut group_users = HashMap::new();
-        users.insert("user1".parse()?, User::new("user1", "user1@email.com")?);
-        roles.insert("role1".parse()?, Role::new("role1", "role1", "role1 description")?);
-        groups.insert("group1".parse()?, Group::new("group1", "group1")?);
-        group_roles.insert("group1".parse()?, HashSet::new());
-        group_users.insert("group1".parse()?, HashSet::new());
+        let users = HashMap::from([
+            ("user1".parse()?,
+            User::new("user1", "user1@email.com")?),
+        ]);
+        let roles = HashMap::from(
+            [("role1".parse()?, Role::new("role1", "role1", "role1 description")?)]
+        );
+        let groups = HashMap::from(
+            [("group1".parse()?, Group::new("group1", "group1")?)]
+        );
+        let group_roles = HashMap::from(
+            [("group1".parse()?, HashSet::new())]
+        );
+        let group_users = HashMap::from(
+            [("group1".parse()?, HashSet::new())]
+        );
         Ok(MockGalaxy {
             id_generator,
             users,
