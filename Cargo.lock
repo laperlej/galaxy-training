@@ -1366,6 +1366,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "training-manager"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "chrono-tz",
+ "mockito",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+ "toml",
+]
+
+[[package]]
 name = "try-lock"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1407,22 +1423,6 @@ dependencies = [
  "form_urlencoded",
  "idna",
  "percent-encoding",
-]
-
-[[package]]
-name = "usegalaxy_management"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "chrono",
- "chrono-tz",
- "mockito",
- "reqwest",
- "serde",
- "serde_json",
- "tokio",
- "toml",
 ]
 
 [[package]]
